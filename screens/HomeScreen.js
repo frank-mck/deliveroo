@@ -2,7 +2,7 @@ import { View, Text, SafeAreaView, Platform, StyleSheet, StatusBar, Image, TextI
 import React, { useLayoutEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { AdjustmentsIcon, ChevronDownIcon, SearchIcon, UserIcon } from "react-native-heroicons/outline";
-import Categories from '../components/categories';
+import Categories from '../components/Categories';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
