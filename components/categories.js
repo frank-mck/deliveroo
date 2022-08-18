@@ -13,7 +13,7 @@ const Categories = () => {
   ]
 
   const renderItems = ({ item }) => {
-    return item
+    return item;
   }
 
   return (
