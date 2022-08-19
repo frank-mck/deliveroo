@@ -2,26 +2,17 @@ import { View, Text, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { ArrowRightIcon } from 'react-native-heroicons/outline'
 import RestaurantCard from './RestaurantCard'
-import sanityClient from '../sanity'
+import { Http } from '../utils/http'
 
 const FeaturedRow = ({ id, title, description }) => {
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(()  => {
-    sanityClient.fetch(`
-      *[_type == "featured" && _id == $id] {
-        ...,
-        restaurant[]->{
-          ...,
-          dishes[]->,
-          type-> {
-            name
-          }
-        },
-      }[0]
-    `, { id }).then((data) => setRestaurants(data?.restaurant))
-  }, [])
-
+    Http.restaurants(id).then(data => {
+      setRestaurants(data.restaurant)
+    })
+  }, []);
+  
   const renderCards = ({ item }) => {
     return (
       <RestaurantCard
@@ -53,7 +44,7 @@ const FeaturedRow = ({ id, title, description }) => {
       <FlatList 
         data={restaurants}
         renderItem={renderCards}
-        keyExtractor={(item, index) => Math.random(index) * 100}
+        keyExtractor={(_, index) => Math.random(index) * 100}
         horizontal
         contentContainerStyle={{
           paddingHorizontal: 15,

@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AdjustmentsIcon, ChevronDownIcon, SearchIcon, UserIcon } from "react-native-heroicons/outline";
 import Categories from '../components/Categories';
 import FeaturedRow from '../components/FeaturedRow';
-import sanityClient from '../sanity';
+import { Http } from '../utils/http';
 
 const HomeScreen = () => {
   const [featCategories, setFeatCategories] = useState([])
@@ -17,15 +17,7 @@ const HomeScreen = () => {
   }, []);
 
   useEffect(() => {
-    sanityClient.fetch(
-      `*[_type == "featured"] {
-        ...,
-        restaurants[]->{
-          ...,
-          dishes[]->
-        }
-      }`
-    ).then(data => {
+    Http.featCategories().then(data => {
       setFeatCategories(data)
     })
   }, []);
