@@ -1,18 +1,45 @@
-import { View, Text, SafeAreaView, Platform, StyleSheet, StatusBar, Image, TextInput, ScrollView } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import { View, Text, SafeAreaView, Platform, StyleSheet, StatusBar, Image, TextInput, ScrollView, FlatList } from 'react-native'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { AdjustmentsIcon, ChevronDownIcon, SearchIcon, UserIcon } from "react-native-heroicons/outline";
 import Categories from '../components/Categories';
 import FeaturedRow from '../components/FeaturedRow';
+import sanityClient from '../sanity';
 
 const HomeScreen = () => {
+  const [featCategories, setFeatCategories] = useState([])
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     })
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    sanityClient.fetch(
+      `*[_type == "featured"] {
+        ...,
+        restaurants[]->{
+          ...,
+          dishes[]->
+        }
+      }`
+    ).then(data => {
+      setFeatCategories(data)
+    })
+  }, []);
+
+  const renderItems = ({ item }) => {
+    return (
+      <FeaturedRow
+        id={item?._id}
+        title={item?.name}
+        description={item?.short_description}
+        key={item?._id}
+      />
+    )
+  }
 
   return (
     <SafeAreaView style={styles.droidSafeArea} className="bg-white pt-5">
@@ -53,21 +80,19 @@ const HomeScreen = () => {
           }}
           >
           <Categories />
-          <FeaturedRow
-            id="123"
-            title='Featured'
-            description="Paid placements from our partners"
+
+          <FlatList
+            data={featCategories}
+            renderItem={renderItems}
+            horizontal
+            keyExtractor={({ _id }) => _id}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingHorizontal: 15,
+              paddingTop: 10,
+            }}
           />
-           <FeaturedRow
-             id="1234"
-            title='Tasty Discounts'
-            description="Everyone's been enjoying these juicy discounts!"
-           />
-           <FeaturedRow
-             id="12345"
-            title='Offers near you!'
-            description="Why not support your local restaurant tonight!"
-          />
+    
         </ScrollView>
     </SafeAreaView>
   )
