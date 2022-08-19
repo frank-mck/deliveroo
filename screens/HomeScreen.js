@@ -30,17 +30,6 @@ const HomeScreen = () => {
     })
   }, []);
 
-  const renderItems = ({ item }) => {
-    return (
-      <FeaturedRow
-        id={item?._id}
-        title={item?.name}
-        description={item?.short_description}
-        key={item?._id}
-      />
-    )
-  }
-
   return (
     <SafeAreaView style={styles.droidSafeArea} className="bg-white pt-5">
         <View className='flex-row pb-3 items-center mx-4 space-x-2'>
@@ -81,17 +70,14 @@ const HomeScreen = () => {
           >
           <Categories />
 
-          <FlatList
-            data={featCategories}
-            renderItem={renderItems}
-            horizontal
-            keyExtractor={({ _id }) => _id}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingHorizontal: 15,
-              paddingTop: 10,
-            }}
-          />
+          {featCategories?.map(({_id, name, short_description}) => (
+            <FeaturedRow
+              id={_id}
+              title={name}
+              description={short_description}
+              key={_id}
+            />
+          ))}
     
         </ScrollView>
     </SafeAreaView>

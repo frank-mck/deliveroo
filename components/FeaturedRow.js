@@ -1,27 +1,43 @@
 import { View, Text, FlatList } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ArrowRightIcon } from 'react-native-heroicons/outline'
 import RestaurantCard from './RestaurantCard'
+import sanityClient from '../sanity'
 
 const FeaturedRow = ({ id, title, description }) => {
-  const restaurantCards = [
-    <RestaurantCard
-      id={'987'}
-      imgUrl='https://links.papareact.com/gn7'
-      title='Yo! Sushi'
-      rating={4.5}
-      genre="Japenese"
-      address="123  Main St"
-      short_description="Test description"
-      dishes={20}
-      long={20}
-      lat
-      key={2205}
-    />,
-  ]
+  const [restaurants, setRestaurants] = useState([]);
+
+  useEffect(()  => {
+    sanityClient.fetch(`
+      *[_type == "featured" && _id == $id] {
+        ...,
+        restaurant[]->{
+          ...,
+          dishes[]->,
+          type-> {
+            name
+          }
+        },
+      }[0]
+    `, { id }).then((data) => setRestaurants(data?.restaurant))
+  }, [])
 
   const renderCards = ({ item }) => {
-    return item;
+    return (
+      <RestaurantCard
+        key={item._id}
+        id={item?._id}
+        imgUrl={item?.image}
+        title={item?.title}
+        rating={item?.rating}
+        genre={item?.type?.name}
+        address={item?.address}
+        short_description={item?.short_description}
+        dishes={item?.dishes}
+        long={item?.long}
+        lat={item?.lat}
+    />
+    )
   }
 
   return (
@@ -35,9 +51,9 @@ const FeaturedRow = ({ id, title, description }) => {
       </Text>
       
       <FlatList 
-        data={restaurantCards}
+        data={restaurants}
         renderItem={renderCards}
-        keyExtractor={({ key }) => key}
+        keyExtractor={(item, index) => Math.random(index) * 100}
         horizontal
         contentContainerStyle={{
           paddingHorizontal: 15,

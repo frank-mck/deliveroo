@@ -1,6 +1,7 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { LocationMarkerIcon, StarIcon } from 'react-native-heroicons/outline'
+import { urlFor } from '../sanity'
 
 const RestaurantCard = ({ 
   id,
@@ -18,7 +19,7 @@ const RestaurantCard = ({
     <TouchableOpacity className='bg-white mr-3 shadow'>
       <Image
         source={{
-          uri: imgUrl,
+          uri: urlFor(imgUrl).url(),
         }}
       className="w-64 h-36 rounded-sm"
       />
