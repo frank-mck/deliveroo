@@ -26,4 +26,9 @@ export const Http = {
       }`
     )
   },
+  categories: () => {
+    return sanityClient.fetch(`
+      *[_type == "category"]
+    `)
+  }
 }

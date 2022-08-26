@@ -1,19 +1,24 @@
 import { View, Text, FlatList } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CategoryCard from './CategoryCard'
+import { Http } from '../utils/http';
+import { urlFor } from '../sanity';
 
 const Categories = () => {
-  const categories = [
-    <CategoryCard imgUrl='https://links.papareact.com/gn7' title='title1' key={33324341} />,
-    <CategoryCard imgUrl='https://links.papareact.com/gn7' title='title2' key={2443422} />,
-    <CategoryCard imgUrl='https://links.papareact.com/gn7' title='title3' key={334311} />,
-    <CategoryCard imgUrl='https://links.papareact.com/gn7' title='title4' key={4143422} />,
-    <CategoryCard imgUrl='https://links.papareact.com/gn7' title='title5' key={143422} />,
-    <CategoryCard imgUrl='https://links.papareact.com/gn7' title='title6' key={1243425} />,
-  ]
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    Http.categories().then((data) => setCategories(data));
+  }, [])
 
   const renderItems = ({ item }) => {
-    return item;
+    return (
+      <CategoryCard 
+        imgUrl={urlFor(item.image).url()}
+        title={item.title} 
+        key={item._id}
+      />
+    );
   }
 
   return (
@@ -28,9 +33,6 @@ const Categories = () => {
         paddingTop: 10,
       }}
     />
-      
-
-
   )
 }
 
