@@ -19,7 +19,7 @@ export const Http = {
     return sanityClient.fetch(
       `*[_type == "featured"] {
         ...,
-        restaurants[]->{
+        restaurant[]->{
           ...,
           dishes[]->
         }

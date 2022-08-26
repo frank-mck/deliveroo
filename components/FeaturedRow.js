@@ -4,7 +4,7 @@ import { ArrowRightIcon } from 'react-native-heroicons/outline'
 import RestaurantCard from './RestaurantCard'
 import { Http } from '../utils/http'
 
-const FeaturedRow = ({ id, title, description }) => {
+const FeaturedRow = ({ id, name, description }) => {
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(()  => {
@@ -16,10 +16,10 @@ const FeaturedRow = ({ id, title, description }) => {
   const renderCards = ({ item }) => {
     return (
       <RestaurantCard
-        key={item._id}
+        key={item?._id}
         id={item?._id}
         imgUrl={item?.image}
-        title={item?.title}
+        title={item?.name}
         rating={item?.rating}
         genre={item?.type?.name}
         address={item?.address}
@@ -34,7 +34,7 @@ const FeaturedRow = ({ id, title, description }) => {
   return (
     <View>
       <View className="mt-4 flex-row items-center justify-between px-4">
-        <Text className='font-bold text-lg'>{title}</Text>
+        <Text className='font-bold text-lg'>{name}</Text>
           <ArrowRightIcon color='#00CCBB' />
       </View>
       <Text className='text-xs text-gray-500 px-4'>

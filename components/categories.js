@@ -26,7 +26,7 @@ const Categories = () => {
       data={categories}
       renderItem={renderItems}
       horizontal
-      keyExtractor={({ key }) => key}
+      keyExtractor={({ key }) =>  Math.random(key) * 100}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{
         paddingHorizontal: 15,

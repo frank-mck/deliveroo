@@ -65,8 +65,8 @@ const HomeScreen = () => {
           {featCategories?.map(({_id, name, short_description}) => (
             <FeaturedRow
               id={_id}
-              title={name}
               description={short_description}
+              name={name}
               key={_id}
             />
           ))}
