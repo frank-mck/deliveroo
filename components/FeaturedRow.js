@@ -8,8 +8,8 @@ const FeaturedRow = ({ id, title, description }) => {
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(()  => {
-    Http.restaurants(id).then(data => {
-      setRestaurants(data.restaurant)
+    Http.restaurants(id).then(({ restaurant }) => {
+      setRestaurants(restaurant)
     })
   }, []);
   
